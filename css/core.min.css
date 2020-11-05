@@ -4828,3 +4828,18 @@ table td span {
   position: relative;
   top: 3px;
 }
+
+.div-previous-date {
+  display: -webkit-flex;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  background-color: #a94442;
+}
+
+.div-previous-date p {
+  margin: 0.5em auto;
+  color: #fff;
+  padding: 0;
+  text-align: center;
+}

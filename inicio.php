@@ -199,7 +199,33 @@
                                 #$ano = date('Y');
                                 #$week = date('N');
                                 $hora = '00:00:00';
+                                $prevday = date('d', strtotime(date('Y-m-d') .' -1 day'));
+                                #$next_date = date('Y-m-d', strtotime(date('Y-m-d') .' +1 day'));
 
+                                // Verifica se todos os períodos foram registrados no dia anterior
+                                $sql = $pdo->prepare("SELECT tipo FROM registro WHERE login_idlogin = :idlogin AND dia = :dia AND mes = :mes AND ano = :ano AND hora <> :hora ORDER BY dia, hora");
+                                $sql->bindParam(':idlogin', $_SESSION['id'], PDO::PARAM_INT);
+                                $sql->bindParam(':dia', $prevday, PDO::PARAM_STR);
+                                $sql->bindParam(':mes', $mes, PDO::PARAM_STR);
+                                $sql->bindParam(':ano', $ano, PDO::PARAM_STR);
+                                $sql->bindParam(':hora', $hora, PDO::PARAM_STR);
+                                $res = $sql->execute();
+                                $ret = $sql->rowCount();
+
+                                    if ($ret < 4) {
+                                        $noprevday = true;
+
+                                        echo'
+                                        <div class="div-previous-date">
+                                            <p class="lead">Os registros do dia anterior não foram finalizados, comunique o administrador.</p>
+                                        </div>';
+                                    } else {
+                                        $noprevday = false;
+                                    }
+                                
+                                $sql->closeCursor();
+
+                                // Busca em todos os registros do mês
                                 $sql = $pdo->prepare("SELECT tipo,dia,hora FROM registro WHERE login_idlogin = :idlogin AND mes = :mes AND ano = :ano AND hora <> :hora ORDER BY dia, hora");
                                 $sql->bindParam(':idlogin', $_SESSION['id'], PDO::PARAM_INT);
                                 $sql->bindParam(':mes', $mes, PDO::PARAM_STR);
@@ -541,6 +567,12 @@
                 $(window).load(function () {
                     $("#modal-alert-change").modal("show");
                 });
+                <?php
+                    }
+
+                    if ($noprevday == true) {
+                ?>
+                    $(".registra-ponto, .div-time").addClass("hide");
                 <?php
                     }
                 ?>
