@@ -4832,13 +4832,13 @@ table td span {
 .div-previous-date {
   display: -webkit-flex;
   display: flex;
-  margin: 0;
+  margin: 0 0 0.5em 0;
   padding: 0;
   background-color: #a94442;
 }
 
 .div-previous-date p {
-  margin: 0.5em auto;
+  margin: 0.3em auto;
   color: #fff;
   padding: 0;
   text-align: center;
