@@ -572,7 +572,7 @@
 
                     if ($noprevday == true) {
                 ?>
-                    $(".registra-ponto, .div-time").addClass("hide");
+                    //$(".registra-ponto, .div-time").addClass("hide");
                 <?php
                     }
                 ?>
