@@ -146,7 +146,7 @@
                     #if(diaSemana() != 'domingo') {
                         if(diaFeriado(date('d/m')) != true) {
                             #$registra_ponto = '<span class="pull-right lead"><a class="btn btn-primary" id="reg-'.$hora.'-'.$data.'" data-toggle="modal" data-target="#modal-add-registro" href="#" title="Clique para registrar o ponto"><i class="fa fa-clock-o"></i> Registrar o ponto</a></span>';
-                            $registra_ponto = '<span class="pull-right lead"><a class="btn btn-primary clock registra-ponto" id="reg-'.$hora.'-'.$data.'" href="#" title="Clique para registrar o ponto"><i class="fa fa-clock-o"></i> '.date('H:i:s').' Registrar o ponto</a></span>';
+                            $registra_ponto = '<span class="pull-right lead"><a class="btn btn-primary clock registra-ponto" id="reg-'.$hora.'-'.$data.'" href="#" title="Clique para registrar o ponto"><i class="fa fa-clock-o"></i>  Registrar o ponto</a></span>';
                         } else {
                             $registra_ponto = '<span class="pull-right lead">Feriado: '.nomeFeriado(date('d/m')).'</span>';
                         }
@@ -479,6 +479,7 @@
                     var currentTime = new Date(), currentHours = currentTime.getHours(), currentMinutes = currentTime.getMinutes(), currentSeconds = currentTime.getSeconds(), currentTimeString;
                     currentMinutes = (currentMinutes < 10 ? "0" : "") + currentMinutes;
                     currentSeconds = (currentSeconds < 10 ? "0" : "") + currentSeconds;
+                    //currentHours = currentHours + 1; //horário de verão
                     currentTimeString = currentHours + ":" + currentMinutes + ":" + currentSeconds;
                     $(".clock").html('<i class="fa fa-clock-o"></i> ' + currentTimeString + ' Registrar o ponto');
                 };

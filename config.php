@@ -4,8 +4,11 @@
     #ini_set('output_buffering', 4096);
     #ini_set('session.auto_start', 1);
     ini_set('display_errors','on');
-    date_default_timezone_set('America/Sao_Paulo');
-	$cfg = array(
+
+    #date_default_timezone_set('America/Sao_Paulo'); //voltar nesse depois que acabar o horário de verão
+    date_default_timezone_set('America/Recife'); //por conta do horário de verão
+    
+    $cfg = array(
         'titulo'=>'Ponto',
         'titulo_extenso'=>'<strong>Ponto</strong>',
         'titulo_abreviado'=>'<strong>P</strong>O',
