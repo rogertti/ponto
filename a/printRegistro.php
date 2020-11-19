@@ -27,11 +27,27 @@
             }
             
             body {
-                font-size: 0.8em;
+                font-size: 1em;
             }
 
             h2.page-header {
                 font-size: 2em;
+            }
+
+            .table>thead>tr>th {
+                padding: 2px !important;;
+            }
+
+           .table>tbody>tr>td {
+                padding: 2px !important;;
+            }
+
+            .table>tfoot>tr>th {
+                padding: 2px !important;;
+            }
+
+            .table>tfoot>tr>td {
+                padding: 2px !important;;
             }
         </style>
         <!--[if lt IE 9]><script src="../js/html5shiv.min.js"></script><script src="../js/respond.min.js"></script><![endif]-->
@@ -72,7 +88,8 @@
                     $ano = $_GET[''.$pyano.''];
 
                     #$sql = $pdo->prepare("SELECT tipo,dia,hora FROM registro WHERE login_idlogin = :idlogin AND mes = :mes AND ano = :ano");
-                    $sql = $pdo->prepare("SELECT login.log,registro.tipo,registro.dia,registro.hora FROM login,registro WHERE registro.login_idlogin = login.idlogin AND login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
+                    #$sql = $pdo->prepare("SELECT login.log,registro.tipo,registro.dia,registro.hora FROM login,registro WHERE registro.login_idlogin = login.idlogin AND login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
+                    $sql = $pdo->prepare("SELECT registro.tipo,registro.dia,registro.hora,nota.texto AS log FROM registro INNER JOIN nota ON nota.login_idlogin = registro.login_idlogin INNER JOIN login ON registro.login_idlogin = login.idlogin WHERE login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
                     $sql->bindParam(':idlogin', $_GET[''.$pylogin.''], PDO::PARAM_INT);
                     $sql->bindParam(':mes', $mes, PDO::PARAM_STR);
                     $sql->bindParam(':ano', $ano, PDO::PARAM_STR);

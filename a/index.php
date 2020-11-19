@@ -354,7 +354,7 @@
                                                                             <div class="form-group">
                                                                                 <label for="log"><i class="fa fa-asterisk"></i> Observa&ccedil;&atilde;o</label>
                                                                                 <div class="input-group col-xs-12 col-sm-12 col-md-12">
-                                                                                    <textarea id="log-'.$lin->idlogin.'" rows="10" class="form-control" placeholder="dd/mm/aaaa -> Lorem ipsum dolor iamet;" required>'.$lin3->texto.'</textarea>
+                                                                                    <textarea id="log-'.$lin->idlogin.'" rows="5" class="form-control" placeholder="dd/mm/aaaa -> Lorem ipsum dolor iamet;" required>'.$lin3->texto.'</textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group">
@@ -371,11 +371,11 @@
                                                                             <div class="form-group">
                                                                                 <label for="log"><i class="fa fa-asterisk"></i> Observa&ccedil;&atilde;o</label>
                                                                                 <div class="input-group col-xs-12 col-sm-12 col-md-12">
-                                                                                    <textarea id="log-'.$lin->idlogin.'" rows="10" class="form-control" placeholder="dd/mm/aaaa -> Lorem ipsum dolor iamet;" required></textarea>
+                                                                                    <textarea id="log-'.$lin->idlogin.'" rows="5" class="form-control" placeholder="dd/mm/aaaa -> Lorem ipsum dolor iamet;" required></textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group">
-                                                                                <button type="submit" class="btn btn-primary btn-flat pull-right btn-submit-log">Salvar</button>
+                                                                                <button type="submit" class="btn btn-primary btn-flat pull-right btn-submit-log">Salvar observa&ccedil;&atilde;o</button>
                                                                             </div>
                                                                         </form>';
                                                                     }
@@ -383,8 +383,8 @@
                                                                 $sql3->closeCursor();
 
                                                             $tab .= '
-                                                                <a class="btn btn-success btn-flat" href="closeRegistro.php?'.$pylogin.'='.$lin->idlogin.'&'.$pynome.'='.$lin->funcionario.'&'.$pyano.'='.$ano.'&'.$getmes.'='.$mes.'">Fechar o m&ecirc;s</a>
-                                                                <a class="btn btn-success btn-flat" href="printRegistro.php?'.$pylogin.'='.$lin->idlogin.'&'.$pynome.'='.$lin->funcionario.'&'.$pyano.'='.$ano.'&'.$getmes.'='.$mes.'">Imprimir</a>
+                                                                <a class="btn btn-success btn-flat" href="closeRegistro.php?'.$pylogin.'='.$lin->idlogin.'&'.$pynome.'='.urlencode($lin->funcionario).'&'.$pyano.'='.$ano.'&'.$getmes.'='.$mes.'" data-toggle="modal" data-target="#close-month">Fechar o m&ecirc;s</a>
+                                                                <a class="btn btn-default btn-flat" href="printRegistro.php?'.$pylogin.'='.$lin->idlogin.'&'.$pynome.'='.urlencode($lin->funcionario).'&'.$pyano.'='.$ano.'&'.$getmes.'='.$mes.'">Imprimir os registros</a>
                                                             </div><!-- tab-pane -->';
                                                             
                                                             $script .= '
@@ -621,11 +621,11 @@
                                                                             <div class="form-group">
                                                                                 <label for="log"><i class="fa fa-asterisk"></i> Observa&ccedil;&atilde;o</label>
                                                                                 <div class="input-group col-xs-12 col-sm-12 col-md-12">
-                                                                                    <textarea id="log-'.$lin->idlogin.'" rows="10" class="form-control" placeholder="dd/mm/aaaa -> Lorem ipsum dolor iamet;" required>'.$lin3->texto.'</textarea>
+                                                                                    <textarea id="log-'.$lin->idlogin.'" rows="5" class="form-control" placeholder="dd/mm/aaaa -> Lorem ipsum dolor iamet;" required>'.$lin3->texto.'</textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group">
-                                                                                <button type="submit" class="btn btn-primary btn-flat pull-right btn-submit-log">Salvar</button>
+                                                                                <button type="submit" class="btn btn-primary btn-flat pull-right btn-submit-log">Salvar observa&ccedil;&atilde;o</button>
                                                                             </div>
                                                                         </form>';
                                                                     } else {
@@ -638,11 +638,11 @@
                                                                             <div class="form-group">
                                                                                 <label for="log"><i class="fa fa-asterisk"></i> Observa&ccedil;&atilde;o</label>
                                                                                 <div class="input-group col-xs-12 col-sm-12 col-md-12">
-                                                                                    <textarea id="log-'.$lin->idlogin.'" rows="10" class="form-control" placeholder="dd/mm/aaaa -> Lorem ipsum dolor iamet;" required></textarea>
+                                                                                    <textarea id="log-'.$lin->idlogin.'" rows="5" class="form-control" placeholder="dd/mm/aaaa -> Lorem ipsum dolor iamet;" required></textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="form-group">
-                                                                                <button type="submit" class="btn btn-primary btn-flat pull-right btn-submit-log">Salvar</button>
+                                                                                <button type="submit" class="btn btn-primary btn-flat pull-right btn-submit-log">Salvar observa&ccedil;&atilde;o</button>
                                                                             </div>
                                                                         </form>';
                                                                     }
@@ -650,8 +650,8 @@
                                                                 $sql3->closeCursor();
 
                                                                 $tab .= '
-                                                                    <a class="btn btn-success btn-flat" href="closeRegistro.php?'.$pylogin.'='.$lin->idlogin.'&'.$pynome.'='.$lin->funcionario.'&'.$pyano.'='.$ano.'&'.$getmes.'='.$mes.'">Fechar o m&ecirc;s</a>
-                                                                    <a class="btn btn-success btn-flat" href="printRegistro.php?'.$pylogin.'='.$lin->idlogin.'&'.$pynome.'='.$lin->funcionario.'&'.$pyano.'='.$ano.'&'.$getmes.'='.$mes.'">Imprimir</a>
+                                                                    <a class="btn btn-success btn-flat" href="closeRegistro.php?'.$pylogin.'='.$lin->idlogin.'&'.$pynome.'='.urlencode($lin->funcionario).'&'.$pyano.'='.$ano.'&'.$getmes.'='.$mes.'" data-toggle="modal" data-target="#close-month">Fechar o m&ecirc;s</a>
+                                                                    <a class="btn btn-default btn-flat" href="printRegistro.php?'.$pylogin.'='.$lin->idlogin.'&'.$pynome.'='.urlencode($lin->funcionario).'&'.$pyano.'='.$ano.'&'.$getmes.'='.$mes.'">Imprimir os registros</a>
                                                                 </div><!-- tab-pane -->';
 
                                                                 $script .= '
@@ -739,6 +739,12 @@
 
             <div class="modal fade" id="edita-registro" role="dialog" aria-hidden="true">
                 <div class="modal-dialog">
+                    <div class="modal-content"></div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="close-month" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
                     <div class="modal-content"></div>
                 </div>
             </div>

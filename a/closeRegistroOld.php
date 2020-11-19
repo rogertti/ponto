@@ -25,35 +25,6 @@
         <link rel="stylesheet" href="../css/smoke.min.css">
         <link rel="stylesheet" href="../css/layout.min.css">
         <link rel="stylesheet" href="../css/core.min.css">
-        <style media="print">
-            * {
-                overflow: visible !important;
-            }
-            
-            body {
-                font-size: 1em;
-            }
-
-            .invoice {
-                page-break-after: always;
-            }
-
-            .table>thead>tr>th {
-                padding: 2px !important;;
-            }
-
-           .table>tbody>tr>td {
-                padding: 2px !important;;
-            }
-
-            .table>tfoot>tr>th {
-                padding: 2px !important;;
-            }
-
-            .table>tfoot>tr>td {
-                padding: 2px !important;;
-            }
-        </style>
         <!--[if lt IE 9]><script src="../js/html5shiv.min.js"></script><script src="../js/respond.min.js"></script><![endif]-->
     </head>
     <body>
@@ -356,8 +327,6 @@
                     $mes = $_GET[''.$pymes.''];
                     $ano = $_GET[''.$pyano.''];
 
-                    /* IMPRIMI A SOMA DOS REGISTROS DO MES */
-
                     $sql = $pdo->prepare("SELECT registro.tipo,registro.dia,registro.mes,registro.ano,registro.hora FROM registro,login WHERE registro.login_idlogin = login.idlogin AND login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
                     $sql->bindParam(':idlogin', $_GET[''.$pylogin.''], PDO::PARAM_INT);
                     $sql->bindParam(':mes', $mes, PDO::PARAM_STR);
@@ -557,11 +526,11 @@
                             echo'<div style="overflow: hidden;height: 80px;">';
 
                                 if($pos_out > $neg_out) {
-                                    echo'<span class="lead">O funcion&aacute;rio trabalhou <strong>'.diffTimeFinal($neg, $pos).' a mais</strong></span>';
+                                    echo'<span class="lead">O funcion&aacute;rio trabalhou <strong>'.diffTimeFinal($neg, $pos).'</strong> a <span class="label label-success">mais</span></span>';
                                 } elseif($pos_out == $neg_out) {
                                     echo'<span class="lead">O funcion&aacute;rio n&atilde;o deve e n&atilde; tem horas para compensar.</span>';
                                 } else {
-                                    echo'<span class="lead">O funcion&aacute;rio trabalhou <strong>'.diffTimeFinal($pos, $neg).' a menos</strong></span>';
+                                    echo'<span class="lead">O funcion&aacute;rio trabalhou <strong>'.diffTimeFinal($pos, $neg).'</strong> a <span class="label label-danger">menos</span></span>';
                                 }
 
                                 echo $day_fault;
@@ -569,181 +538,12 @@
                             echo'
                                 </div>
                                 <div>
-                                    <p>___________________________________________________<br><i>Assinatura</i></p>
+                                    <a class="btn btn-default btn-flat" href="'.$_SESSION['geturl'].'">Voltar</a>
+                                    <a class="btn btn-primary btn-flat" href="printCloseRegistro.php?'.$pylogin.'='.$_GET[''.$pylogin.''].'&'.$pynome.'='.$_GET[''.$pynome.''].'&'.$pyano.'='.$_GET[''.$pyano.''].'&'.$pymes.'='.$_GET[''.$pymes.''].'">Imprimir</a>
                                 </div>
                             </div>
-                            </div>
-                            </section>';
+                            </div>';
                         } //$ret
-
-                    $sql->closeCursor();
-                    
-                    /* IMPRIMI TODOS OS REGISTROS DO MES */
-
-                    #$sql = $pdo->prepare("SELECT login.log,registro.tipo,registro.dia,registro.hora FROM login,registro WHERE registro.login_idlogin = login.idlogin AND login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
-                    $sql = $pdo->prepare("SELECT registro.tipo,registro.dia,registro.hora,nota.texto AS log FROM registro INNER JOIN nota ON nota.login_idlogin = registro.login_idlogin INNER JOIN login ON registro.login_idlogin = login.idlogin WHERE login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
-                    $sql->bindParam(':idlogin', $_GET[''.$pylogin.''], PDO::PARAM_INT);
-                    $sql->bindParam(':mes', $mes, PDO::PARAM_STR);
-                    $sql->bindParam(':ano', $ano, PDO::PARAM_STR);
-                    $sql->bindParam(':hora', $pathora, PDO::PARAM_STR);
-                    $res = $sql->execute();
-                    $ret = $sql->rowCount();
-
-                        if($ret > 0) {
-                            $hm = '';
-
-                            echo'
-                            <section class="invoice">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <h2 class="page-header">'.$_GET[''.$pynome.''].' - '.mes_extenso($mes).' de '.$ano.'</h2>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-xs-12 table-responsive">
-                                    <table class="table table-border table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>Dia</th>
-                                                    <th>Come&ccedil;o do expediente</th>
-                                                    <th>Sa&iacute;da para o almo&ccedil;o</th>
-                                                    <th>Chegada do almo&ccedil;o</th>
-                                                    <th>Fim do expediente</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>';
-
-                                while($lin = $sql->fetch(PDO::FETCH_OBJ)) {
-                                    //Suprime os segundos
-                                    $hora = substr($lin->hora,0,5);
-
-                                        if(isset($dia)) {
-                                            if($dia == $lin->dia) {
-                                                if($tipo == 'PHM' and $lin->tipo == 'SHM') {
-                                                    $hm .= '<td>'.$hora.' h</td>';
-                                                    $tipo = $lin->tipo;
-                                                } elseif($tipo == 'SHM' and $lin->tipo == 'PHT') {
-                                                    $hm .= '<td>'.$hora.' h</td>';
-                                                    $tipo = $lin->tipo;
-                                                } elseif($tipo == 'PHT' and $lin->tipo == 'SHT') {
-                                                    $hm .= '<td>'.$hora.' h</td>';
-                                                    $tipo = $lin->tipo;
-                                                } else {
-                                                    $hm .= '<td>'.$hora.' h</td>';
-                                                    $tipo = 'PHM';
-                                                }
-                                            } else {
-                                                switch ($lin->tipo) {
-                                                    case 'PHM':
-                                                        $hm .= '
-                                                        <tr>
-                                                            <td>'.$lin->dia.'</td>
-                                                            <td>'.$hora.' h</td>';
-                                                        $tipo = $lin->tipo;
-                                                        break;
-                                                    case 'SHM':
-                                                        $hm .= '
-                                                        <tr>
-                                                            <td>'.$lin->dia.'</td>
-                                                            <td></td>
-                                                            <td>'.$hora.' h</td>';
-                                                        $tipo = $lin->tipo;
-                                                        break;
-                                                    case 'PHT':
-                                                        $hm .= '
-                                                        <tr>
-                                                            <td>'.$lin->dia.'</td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td>'.$hora.' h</td>';
-                                                        $tipo = $lin->tipo;
-                                                        break;
-                                                    case 'SHT':
-                                                        $hm .= '
-                                                        <tr>
-                                                            <td>'.$lin->dia.'</td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td>'.$hora.' h</td>';
-                                                        $tipo = $lin->tipo;
-                                                        break;
-                                                }
-                                            }
-                                        } else {
-                                            switch ($lin->tipo) {
-                                                case 'PHM':
-                                                    $hm .= '
-                                                    <tr>
-                                                        <td>'.$lin->dia.'</td>
-                                                        <td>'.$hora.' h</td>';
-                                                    $tipo = $lin->tipo;
-                                                    break;
-                                                case 'SHM':
-                                                    $hm .= '
-                                                    <tr>
-                                                        <td>'.$lin->dia.'</td>
-                                                        <td></td>
-                                                        <td>'.$hora.' h</td>';
-                                                    $tipo = $lin->tipo;
-                                                    break;
-                                                case 'PHT':
-                                                    $hm .= '
-                                                    <tr>
-                                                        <td>'.$lin->dia.'</td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td>'.$hora.' h</td>';
-                                                    $tipo = $lin->tipo;
-                                                    break;
-                                                case 'SHT':
-                                                    $hm .= '
-                                                    <tr>
-                                                        <td>'.$lin->dia.'</td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td>'.$hora.' h</td>';
-                                                    $tipo = $lin->tipo;
-                                                    break;
-                                            }
-                                        }
-
-                                    $dia = $lin->dia;
-                                    $log = $lin->log;
-                                }
-
-                            echo $hm.'</tr>';
-
-                            echo'
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div style="overflow: hidden;height: 80px;">';
-
-                                if($pos_out > $neg_out) {
-                                    echo'<span class="lead">O funcion&aacute;rio trabalhou <strong>'.diffTimeFinal($neg, $pos).' a mais</strong></span>';
-                                } elseif($pos_out == $neg_out) {
-                                    echo'<span class="lead">O funcion&aacute;rio n&atilde;o deve e n&atilde; tem horas para compensar.</span>';
-                                } else {
-                                    echo'<span class="lead">O funcion&aacute;rio trabalhou <strong>'.diffTimeFinal($pos, $neg).' a menos</strong></span>';
-                                }
-
-                                echo $day_fault;
-
-                            echo'
-                                </div>
-                                <div>
-                                    <p>___________________________________________________<br><i>Assinatura</i></p>
-                                </div>
-                            
-                            <!--<div class="row">
-                                <div class="col-xs-12 pre-log"><pre>'.$log.'</pre></div>
-                            </div>-->';
-                        }
                 }
                 catch(PDOException $e) {
                     echo'<span>Erro ao conectar o servidor: '.$e->getMessage().'</span>';
@@ -752,19 +552,6 @@
         </section>
 
         <script src="../js/jquery-2.1.4.min.js"></script>
-        <script>
-            $(function() {
-                /* PRINT */
-
-                <?php if(!empty($ret)) { ?>
-                print();
-
-                $(window).mouseleave(function() {
-                    location.href = "<?php echo $_SESSION['geturl']; ?>";
-                });     
-                <?php } ?>
-            });
-        </script>
     </body>
 </html>
 <?php unset($cfg,$m,$e,$pdo,$fmes,$pylogin,$pynome,$sql,$res,$ret,$lin,$ano,$mes,$hora); ?>
