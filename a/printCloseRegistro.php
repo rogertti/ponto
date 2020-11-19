@@ -356,6 +356,24 @@
                     $mes = $_GET[''.$pymes.''];
                     $ano = $_GET[''.$pyano.''];
 
+                    /* BUSCA A NOTA */
+
+                    $sql = $pdo->prepare("SELECT texto FROM nota WHERE login_idlogin = :idlogin AND mes = :mes AND ano = :ano");
+                    $sql->bindParam(':idlogin', $_GET[''.$pylogin.''], PDO::PARAM_INT);
+                    $sql->bindParam(':mes', $mes, PDO::PARAM_STR);
+                    $sql->bindParam(':ano', $ano, PDO::PARAM_STR);
+                    $res = $sql->execute();
+                    $ret = $sql->rowCount();
+
+                        if ($ret > 0) {
+                            $lin = $sql->fetch(PDO::FETCH_OBJ);
+                            $log = $lin->texto;
+                        } else {
+                            $log = '';
+                        }
+
+                    $sql->closeCursor();
+
                     /* IMPRIMI A SOMA DOS REGISTROS DO MES */
 
                     $sql = $pdo->prepare("SELECT registro.tipo,registro.dia,registro.mes,registro.ano,registro.hora FROM registro,login WHERE registro.login_idlogin = login.idlogin AND login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
@@ -554,7 +572,12 @@
                             #echo 'pos: '.$pos_out.' | neg: '.$neg_out.'<br>';
                             #exit;
 
-                            echo'<div style="overflow: hidden;height: 80px;">';
+                            echo'
+                            <div class="row">
+                                <div class="col-xs-12 pre-log"><pre>'.$log.'</pre></div>
+                            </div>
+
+                            <div style="overflow: hidden;height: 80px;">';
 
                                 if($pos_out > $neg_out) {
                                     echo'<span class="lead">O funcion&aacute;rio trabalhou <strong>'.diffTimeFinal($neg, $pos).' a mais</strong></span>';
@@ -711,7 +734,6 @@
                                         }
 
                                     $dia = $lin->dia;
-                                    $log = $lin->log;
                                 }
 
                             echo $hm.'</tr>';
@@ -720,6 +742,10 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 pre-log"><pre>'.$log.'</pre></div>
                             </div>
 
                             <div style="overflow: hidden;height: 80px;">';
@@ -735,14 +761,10 @@
                                 echo $day_fault;
 
                             echo'
-                                </div>
-                                <div>
-                                    <p>___________________________________________________<br><i>Assinatura</i></p>
-                                </div>
-                            
-                            <!--<div class="row">
-                                <div class="col-xs-12 pre-log"><pre>'.$log.'</pre></div>
-                            </div>-->';
+                            </div>
+                            <div>
+                                <p>___________________________________________________<br><i>Assinatura</i></p>
+                            </div>';
                         }
                 }
                 catch(PDOException $e) {
@@ -761,7 +783,7 @@
 
                 $(window).mouseleave(function() {
                     location.href = "<?php echo $_SESSION['geturl']; ?>";
-                });     
+                });   
                 <?php } ?>
             });
         </script>

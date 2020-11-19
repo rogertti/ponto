@@ -87,6 +87,26 @@
                     $mes = $_GET[''.$pymes.''];
                     $ano = $_GET[''.$pyano.''];
 
+                    /* BUSCA A NOTA */
+
+                    $sql = $pdo->prepare("SELECT texto FROM nota WHERE login_idlogin = :idlogin AND mes = :mes AND ano = :ano");
+                    $sql->bindParam(':idlogin', $_GET[''.$pylogin.''], PDO::PARAM_INT);
+                    $sql->bindParam(':mes', $mes, PDO::PARAM_STR);
+                    $sql->bindParam(':ano', $ano, PDO::PARAM_STR);
+                    $res = $sql->execute();
+                    $ret = $sql->rowCount();
+
+                        if ($ret > 0) {
+                            $lin = $sql->fetch(PDO::FETCH_OBJ);
+                            $log = $lin->texto;
+                        } else {
+                            $log = '';
+                        }
+
+                    $sql->closeCursor();
+
+                    /* IMPRIMI TODOS OS REGISTROS DO MES */
+
                     #$sql = $pdo->prepare("SELECT login.log,registro.tipo,registro.dia,registro.hora FROM login,registro WHERE registro.login_idlogin = login.idlogin AND login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
                     $sql = $pdo->prepare("SELECT registro.tipo,registro.dia,registro.hora,nota.texto AS log FROM registro INNER JOIN nota ON nota.login_idlogin = registro.login_idlogin INNER JOIN login ON registro.login_idlogin = login.idlogin WHERE nota.login_idlogin = :idlogin AND nota.mes = :mes AND nota.ano = :ano AND login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
                     $sql->bindParam(':idlogin', $_GET[''.$pylogin.''], PDO::PARAM_INT);
@@ -258,11 +278,11 @@
                 /* PRINT */
 
                 <?php if(!empty($ret)) { ?>
-                print();
+                /*print();
 
                 $(window).mouseleave(function() {
                     location.href = "<?php echo $_SESSION['geturl']; ?>";
-                });      
+                });*/      
                 <?php } ?>
             });
         </script>
