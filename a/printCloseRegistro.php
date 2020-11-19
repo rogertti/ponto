@@ -367,9 +367,9 @@
 
                         if ($ret > 0) {
                             $lin = $sql->fetch(PDO::FETCH_OBJ);
-                            $log = $lin->texto;
+                            $nota = '<div class="row"><div class="col-xs-12 pre-log"><pre>'.$lin->texto.'</pre></div></div>';
                         } else {
-                            $log = '';
+                            $nota = '';
                         }
 
                     $sql->closeCursor();
@@ -572,12 +572,9 @@
                             #echo 'pos: '.$pos_out.' | neg: '.$neg_out.'<br>';
                             #exit;
 
-                            echo'
-                            <div class="row">
-                                <div class="col-xs-12 pre-log"><pre>'.$log.'</pre></div>
-                            </div>
+                            echo $nota;
 
-                            <div style="overflow: hidden;height: 80px;">';
+                            echo'<div style="overflow: hidden;height: 80px;">';
 
                                 if($pos_out > $neg_out) {
                                     echo'<span class="lead">O funcion&aacute;rio trabalhou <strong>'.diffTimeFinal($neg, $pos).' a mais</strong></span>';
@@ -604,7 +601,7 @@
                     /* IMPRIMI TODOS OS REGISTROS DO MES */
 
                     #$sql = $pdo->prepare("SELECT login.log,registro.tipo,registro.dia,registro.hora FROM login,registro WHERE registro.login_idlogin = login.idlogin AND login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
-                    $sql = $pdo->prepare("SELECT registro.tipo,registro.dia,registro.hora,nota.texto AS log FROM registro INNER JOIN nota ON nota.login_idlogin = registro.login_idlogin INNER JOIN login ON registro.login_idlogin = login.idlogin WHERE nota.login_idlogin = :idlogin AND nota.mes = :mes AND nota.ano = :ano AND login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
+                    $sql = $pdo->prepare("SELECT registro.tipo,registro.dia,registro.mes,registro.ano,registro.hora FROM registro,login WHERE registro.login_idlogin = login.idlogin AND login.idlogin = :idlogin AND registro.mes = :mes AND registro.ano = :ano AND registro.hora <> :hora ORDER BY registro.dia,registro.hora");
                     $sql->bindParam(':idlogin', $_GET[''.$pylogin.''], PDO::PARAM_INT);
                     $sql->bindParam(':mes', $mes, PDO::PARAM_STR);
                     $sql->bindParam(':ano', $ano, PDO::PARAM_STR);
@@ -742,13 +739,11 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            </div>';
 
-                            <div class="row">
-                                <div class="col-xs-12 pre-log"><pre>'.$log.'</pre></div>
-                            </div>
+                            echo $nota;
 
-                            <div style="overflow: hidden;height: 80px;">';
+                            echo'<div style="overflow: hidden;height: 80px;">';
 
                                 if($pos_out > $neg_out) {
                                     echo'<span class="lead">O funcion&aacute;rio trabalhou <strong>'.diffTimeFinal($neg, $pos).' a mais</strong></span>';
@@ -783,7 +778,7 @@
 
                 $(window).mouseleave(function() {
                     location.href = "<?php echo $_SESSION['geturl']; ?>";
-                });   
+                });  
                 <?php } ?>
             });
         </script>

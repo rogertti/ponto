@@ -454,7 +454,6 @@
                                 }
 
                             $dia = $lin->dia;
-                            #$log = $lin->log;
                         }
 
                     echo $hm.'</tr>';
@@ -463,9 +462,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-
-                    <hr>';
+                    </div>';
                 }
 
             $sql->closeCursor();
@@ -481,9 +478,9 @@
 
                 if ($ret > 0) {
                     $lin = $sql->fetch(PDO::FETCH_OBJ);
-                    $log = $lin->texto;
+                    $nota = '<div class="row"><div class="col-xs-12 pre-log"><pre>'.$lin->texto.'</pre></div></div>';
                 } else {
-                    $log = '';
+                    $nota = '';
                 }
 
             $sql->closeCursor();
@@ -686,12 +683,9 @@
                     #echo 'pos: '.$pos_out.' | neg: '.$neg_out.'<br>';
                     #exit;
 
-                    echo'
-                    <div class="row">
-                        <div class="col-xs-12 pre-log"><pre>'.$log.'</pre></div>
-                    </div>
+                    echo $nota;
 
-                    <div style="overflow: hidden;height: 80px;">';
+                    echo'<div style="overflow: hidden;height: 80px;">';
 
                         if($pos_out > $neg_out) {
                             echo'<span class="lead">O funcion&aacute;rio trabalhou <strong>'.diffTimeFinal($neg, $pos).'</strong> a <span class="label label-success">mais</span></span>';
